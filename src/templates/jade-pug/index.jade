@@ -1,0 +1,29 @@
+extends _layout/layout
+
+block variables
+  - var title = 'K-Animation'
+  - var bodyclass = 'index'
+
+block css
+
+block body 
+  .demo
+  .demo2
+  .demo3
+  .abc(da-m) ho ho 
+  script.
+    $(function() {
+      $(".demo, [da-m]").kAnimation({
+        color: 'blue'
+      });
+
+      $('.demo2').kAnimation().on('change', function(e) {
+        console.log(1);
+      });
+
+      $('.demo3').kAnimation().on('leave', function(e) {
+        console.log(1);
+      });
+
+      // $('a').color().background('#300');
+    });
