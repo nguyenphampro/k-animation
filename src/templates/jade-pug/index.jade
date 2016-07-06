@@ -7,23 +7,67 @@ block variables
 block css
 
 block body 
-  .demo
-  .demo2
-  .demo3
-  .abc(da-m) ho ho 
+  p.click Click
+  p.hover Hover
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  p d
+  .auto Auto 
+  .scroll Scroll
   script.
     $(function() {
-      $(".demo, [da-m]").kAnimation({
-        color: 'blue'
+      $(".scroll").kAnimation({
+        ClassName: 'animated',
+        Animation: [
+          'fadeInUp',
+          'fadeOutUp',
+        ],
+        //- Animation: 'fadeInUp',
+        Delay: 3000,
+        ScrollLoop: true,
+        Type: 'Scroll' // auto, scroll, click, hover
       });
 
-      $('.demo2').kAnimation().on('change', function(e) {
-        console.log(1);
+      $('.auto').kAnimation({
+        ClassName: 'animated',
+        Animation: 'fadeInUp'
       });
 
-      $('.demo3').kAnimation().on('leave', function(e) {
-        console.log(1);
+      $('.click').kAnimation({
+        ClassName: 'animated',
+        Animation: 'fadeInUp',
+        Delay: 3000,
+        ScrollLoop: true,
+        Type: 'Click'
       });
 
-      // $('a').color().background('#300');
+      $('.hover').kAnimation({
+        ClassName: 'animated',
+        Animation: 'fadeInUp',
+        Type: 'Hover'
+      });
     });
