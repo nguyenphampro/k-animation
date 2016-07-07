@@ -5,69 +5,132 @@ block variables
   - var bodyclass = 'index'
 
 block css
+  link(rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css")
 
 block body 
-  p.click Click
-  p.hover Hover
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  p d
-  .auto Auto 
-  .scroll Scroll
+  .container
+    h1.display-4(style="margin:2rem 0;") K-Animation 
+    hr 
+
+    h3(style="margin:2rem 0;") Via Auto 
+    .jumbotron
+      p.auto Auto Animation 
+    .row.marketing
+      .col-lg-12
+        h4 JS
+        pre.prettyprint.lang-js.
+          $(document).ready(function() {
+            $('.auto').kAnimation({
+              ClassName: 'animated fadeInUp',
+              Animation: [
+                'fadeIn',
+                'fadeOutUp',
+              ],
+              Delay: 1000,
+              Forever: true,
+              DelayForever: 3000
+            });
+          });
+
+    h3(style="margin:2rem 0;") Via Click 
+    .jumbotron
+      p.click Click to Animation 
+    .row.marketing
+      .col-lg-12
+        h4 JS
+        pre.prettyprint.lang-js.
+          $(document).ready(function() {
+            $('.click').kAnimation({
+              ClassName: 'animated',
+              Animation: 'fadeInUp',
+              Type: 'Click',
+              Forever: true,
+              DelayForever: 100
+            });
+          });
+    h3(style="margin:2rem 0;") Via Hover 
+    .jumbotron
+      p.hover Hover to Animation 
+    .row.marketing
+      .col-lg-12
+        h4 JS
+        pre.prettyprint.lang-js.
+          $(document).ready(function() {
+            $('.hover').kAnimation({
+              ClassName: 'animated',
+              Animation: 'fadeInUp',
+              Type: 'Hover',
+              Forever: true,
+              DelayForever: 100
+            });
+          });
+ 
+    h3(style="margin:2rem 0;") Via Scroll 
+    .jumbotron
+      p.scroll Scroll to Animation 
+    .row.marketing
+      .col-lg-12
+        h4 JS
+        pre.prettyprint.lang-js.
+          $(document).ready(function() {
+            $(".scroll").kAnimation({
+              ClassName: 'animated',
+              Animation: 'fadeInUp',
+              Delay: 2000,
+              ScrollLoop: true,
+              Type: 'Scroll'
+            });
+          });
+    h1(style="margin:2rem 0;") HTML Attrs 
+    h3(style="margin:2rem 0;") Via Auto
+    .jumbotron
+      p.className(k-animation="{ClassName: 'animated fadeInUp', Animation: [ 'fadeIn', 'fadeOutUp',], Delay: 1000, Forever: true, DelayForever: 3000}") Auto Animation 
+    .row.marketing
+      .col-lg-12
+        h4 HTML
+        pre.prettyprint.lang-html.
+          [k-animation="{ClassName: 'animated fadeInUp', Animation: [ 'fadeIn', 'fadeOutUp',], Delay: 1000, Forever: true, DelayForever: 3000}"]
+        h4 JS
+        pre.prettyprint.lang-js.
+          $('.className').kAnimation();
+  block js 
+    script(src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js')
   script.
     $(function() {
       $(".scroll").kAnimation({
         ClassName: 'animated',
-        Animation: [
-          'fadeInUp',
-          'fadeOutUp',
-        ],
-        //- Animation: 'fadeInUp',
-        Delay: 3000,
+        Animation: 'fadeInUp',
+        Delay: 1000,
         ScrollLoop: true,
-        Type: 'Scroll' // auto, scroll, click, hover
+        Type: 'Scroll'
       });
 
       $('.auto').kAnimation({
-        ClassName: 'animated',
-        Animation: 'fadeInUp'
+        ClassName: 'animated fadeInUp',
+        Animation: [
+          'fadeIn',
+          'fadeOutUp',
+        ],
+        Delay: 1000,
+        Forever: true,
+        DelayForever: 3000
       });
+
+      $('[k-animation]').kAnimation();
 
       $('.click').kAnimation({
         ClassName: 'animated',
         Animation: 'fadeInUp',
-        Delay: 3000,
-        ScrollLoop: true,
-        Type: 'Click'
+        Type: 'Click',
+        Forever: true,
+        DelayForever: 100
       });
 
       $('.hover').kAnimation({
         ClassName: 'animated',
         Animation: 'fadeInUp',
-        Type: 'Hover'
+        Type: 'Hover',
+        Forever: true,
+        DelayForever: 100
       });
     });

@@ -22,7 +22,9 @@
             Animation: 'fadeIn',
             Type: 'auto', // auto, scroll, click, hover
             Delay: '0',
-            ScrollLoop: true
+            Forever: false,
+            DelayForever: 0,
+            ScrollLoop: false
         }
 
         this.init(options)
@@ -32,18 +34,20 @@
         // Initial 
         init: function(options) {
             $.extend(this.options, options)
+            var attr = this.element.attr('k-animation')
+                // if (attr) {
+                //     this.options = attr
+                // }
             var $e = this.element,
                 $o = this.options,
                 $d = this.options.Delay,
                 $sl = this.options.ScrollLoop,
+                $f = this.options.Forever,
+                $df = this.options.DelayForever,
                 $t = (this.options.Type).toLocaleLowerCase()
-
-            // console.log(typeof($o.Animation))
-            // console.log($o)
-
-
-            // DO Animation 
+                // DO Animation 
             var doAnimation = function(remove) {
+                // console.log(options)
                 if (remove === 'remove') {
                     $e.removeClass($o.ClassName)
                 } else {
@@ -85,54 +89,87 @@
 
             // Scroll
             if ($t === 'scroll') {
-                var $w = $(window)
-                    // Xem lai ham nay 
-                function check_if_in_view() {
-                    var window_height = $w.height()
-                    var window_top_position = $w.scrollTop()
-                    var window_bottom_position = (window_top_position + window_height)
+                $e.each(function(index) {
+                    var $w = $(window)
+                        // Xem lai ham nay 
+                    function check_if_in_view() {
+                        var window_height = $w.height()
+                        var window_top_position = $w.scrollTop()
+                        var window_bottom_position = (window_top_position + window_height)
 
-                    $.each($e, function() {
-                        var $element = $(this)
-                        var element_height = $element.outerHeight()
-                        var element_top_position = $element.offset().top
-                        var element_bottom_position = (element_top_position + element_height)
+                        $.each($e, function() {
+                            var $element = $(this)
+                            var element_height = $element.outerHeight()
+                            var element_top_position = $element.offset().top
+                            var element_bottom_position = (element_top_position + element_height)
 
-                        if ((element_bottom_position >= window_top_position) &&
-                            (element_top_position <= window_bottom_position)) {
-                            doAnimation()
-                        } else {
-                            if ($sl) {
-                                doAnimation('remove')
+                            if ((element_bottom_position >= window_top_position) && (element_top_position <= window_bottom_position)) {
+                                doAnimation()
+                            } else {
+                                if ($sl) {
+                                    doAnimation('remove')
+                                }
                             }
-                        }
-                    })
-                }
+                        })
+                    }
 
-                $w.on('scroll resize', check_if_in_view)
+                    $w.on('scroll resize', check_if_in_view)
+                })
             }
             // Click
             else if ($t === 'click') {
                 $e.each(function(index) {
-                    $(this).on('click', function() {
-                        doAnimation()
-                    })
-                    if ($sl) {
-                        console.log(1);
+                    if ($f) {
+                        $(this).clickToggle(function() {
+                            doAnimation('remove')
+                            setTimeout(function() {
+                                doAnimation()
+                            }, $df)
+                        }, function() {
+                            doAnimation('remove')
+                            setTimeout(function() {
+                                doAnimation()
+                            }, $df)
+                        })
                     } else {
-                        console.log(3);
+                        $(this).click(function() {
+                            doAnimation()
+                        })
                     }
                 })
             }
-            // Click
+            // Hover
             else if ($t === 'hover') {
                 $e.each(function(index) {
-                    $(this).hover(function() {
-                        doAnimation()
-                    })
+                    if ($f) {
+                        $(this).hover(function() {
+                            setTimeout(function() {
+                                doAnimation('remove')
+                                doAnimation()
+                            }, $df)
+                        }, function() {
+                            doAnimation('remove')
+                        })
+                    } else {
+                        $(this).hover(function() {
+                            doAnimation()
+                        })
+                    }
                 })
-            } else {
-                doAnimation()
+            }
+            // Auto 
+            else {
+                $e.each(function(index) {
+                    if ($f) {
+                        doAnimation()
+                        setInterval(function() {
+                            doAnimation('remove')
+                            doAnimation()
+                        }, $df)
+                    } else {
+                        doAnimation()
+                    }
+                })
             }
         },
         // More Options
@@ -148,7 +185,14 @@
 
     }
 
-    // Build Animation 
+    // Click Toggle
+    $.fn.clickToggle = function(a, b) {
+            function cb() {
+                [b, a][this._tog ^= 1].call(this)
+            }
+            return this.on('click', cb)
+        }
+        // Build Animation 
     $.fn[kA] = function(options) {
         var jQuerykAnimation = this.data(key)
         if (jQuerykAnimation instanceof kaGlobal) {
