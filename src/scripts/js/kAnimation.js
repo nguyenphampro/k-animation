@@ -3,6 +3,7 @@
  *  Author: Bao Nguyen
  *  License: MIT
  *  Website: http://baonguyenyam.github.io
+ *  Version: 6.0.1
  */
 
 
@@ -195,7 +196,6 @@
         unbindEvents: function() {
             this.element.off('.' + this._name)
             this.element.removeData()
-                // this.bindEvents(null)
         },
 
         // Create custom methods
