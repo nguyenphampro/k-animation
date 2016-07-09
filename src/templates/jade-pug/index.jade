@@ -28,22 +28,7 @@ block body
               ],
               Delay: 1000,
               Forever: true,
-              DelayForever: 3000,
-              onComplete: function(){
-                $(this).html('Text changed');
-              },
-              onClick: function(){
-              alert('Clicked');
-              },
-              onChange: function(){
-              console.log('onChange');
-              },
-              onBegin: function(){
-              console.log('onBegin');
-              },
-              onHover: function(){
-              alert('onHover');
-              }
+              DelayForever: 3000
             });
           });
 
@@ -97,6 +82,7 @@ block body
             });
           });
     h1(style="margin:2rem 0;") HTML Attrs 
+    hr
     h3(style="margin:2rem 0;") Via Auto
     .jumbotron
       p(k-Animation='animated fadeInUp', k-Class="fadeIn, fadeOutUp", k-Delay="1000", k-Forever="true", k-DelayForever="3000", k-Type="Auto") Auto Animation 
@@ -108,6 +94,46 @@ block body
         h4 JS
         pre.prettyprint.lang-js.
           $('[k-Animation]').kAnimation();
+    h1.display-4(style="margin:2rem 0;") Events
+    hr 
+
+    h3(style="margin:2rem 0;") Via Events 
+    .jumbotron
+      p.events Auto Animation 
+    .row.marketing
+      .col-lg-12
+        h4 JS
+        pre.prettyprint.lang-js.
+          $(document).ready(function() {
+            $('.events').kAnimation({
+              ClassName: 'animated fadeInUp',
+              Animation: [
+                'fadeIn',
+                'fadeOutUp',
+              ],
+              Delay: 1000,
+              Forever: true,
+              DelayForever: 3000,
+              onComplete: function(){
+                $(this).html('Text changed');
+              },
+              onClick: function(){
+                alert('Clicked');
+              },
+              onChange: function(){
+                console.log('onChange');
+              },
+              onBegin: function(){
+                console.log('onBegin');
+              },
+              onHover: function(){
+                alert('onHover');
+              },
+              unHover: function(){
+                alert('unHover');
+              }
+            });
+          });
   block js 
     script(src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js')
   script.
@@ -128,6 +154,17 @@ block body
         ],
         Delay: 1000,
         Forever: true,
+        DelayForever: 3000
+      });
+
+      $('.events').kAnimation({
+        ClassName: 'animated fadeInUp',
+        Animation: [
+          'fadeIn',
+          'fadeOutUp',
+        ],
+        Delay: 1000,
+        Forever: true,
         DelayForever: 3000,
         onComplete: function(){
           $(this).html('Text changed');
@@ -136,13 +173,16 @@ block body
          alert('Clicked');
         },
         onChange: function(){
-        //-  console.log('onChange');
+         console.log('onChange');
         },
         onBegin: function(){
-        //-  console.log('onBegin');
+         console.log('onBegin');
         },
         onHover: function(){
-         alert('onHover');
+        //-  alert('onHover');
+        },
+        unHover: function(){
+         alert('unHover');
         }
       });
 

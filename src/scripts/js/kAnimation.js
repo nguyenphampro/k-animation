@@ -5,6 +5,7 @@
  *  Website: http://baonguyenyam.github.io
  */
 
+
 ;
 (function($, window, document, undefined) {
     var kA = 'kAnimation'
@@ -18,17 +19,15 @@
     }
     $.extend(kaGlobal.prototype, {
         init: function() {
-            this.buildAnimation()
             this.bindEvents()
             this.onComplete()
         },
 
         destroy: function() {
             this.unbindEvents()
-            this.element.removeData()
         },
 
-        buildAnimation: function() {
+        bindEvents: function() {
             var plugin = this
             this.element = $(this.element)
             if (this.element.attr('k-animation')) {
@@ -181,10 +180,6 @@
                     }
                 })
             }
-        },
-
-        bindEvents: function() {
-            var plugin = this
 
             plugin.element.on('click' + '.' + plugin._name, function() {
                 plugin.onClick.call(plugin)
@@ -192,10 +187,15 @@
             plugin.element.on('mouseover' + '.' + plugin._name, function() {
                 plugin.onHover.call(plugin)
             })
+            plugin.element.on('mouseleave' + '.' + plugin._name, function() {
+                plugin.unHover.call(plugin)
+            })
         },
 
         unbindEvents: function() {
             this.element.off('.' + this._name)
+            this.element.removeData()
+                // this.bindEvents(null)
         },
 
         // Create custom methods
@@ -214,6 +214,15 @@
                 onHover.call(this.element)
             }
         },
+
+        unHover: function() {
+            var unHover = this.options.unHover
+
+            if (typeof unHover === 'function') {
+                unHover.call(this.element)
+            }
+        },
+
         onBegin: function() {
             var onBegin = this.options.onBegin
 
