@@ -6,28 +6,32 @@
  */
 ;
 (function($, window, document, undefined) {
-    var pluginName = 'kAnimation'
+    var kA = 'kAnimation',
+        key = 'ka_' + kA
 
-    function Plugin(element, options) {
+    var kaGlobal = function(element, options) {
         this.element = element
-        this._name = pluginName
-        this._defaults = $.fn.kAnimation.defaults
-        this.options = $.extend({}, this._defaults, options)
-        this.init()
+
+        // OPTIONS
+        this.options = {
+            ClassName: 'animated',
+            Animation: 'fadeIn',
+            Type: 'auto', // auto, scroll, click, hover
+            Delay: '0',
+            Forever: false,
+            DelayForever: 0,
+            ScrollLoop: false
+        }
+
+        this.init(options)
     }
-    $.extend(Plugin.prototype, {
-        init: function() {
-            this.buildAnimation()
-            this.bindEvents()
-        },
 
-        destroy: function() {
-            this.unbindEvents()
-            this.element.removeData()
-        },
+    kaGlobal.prototype = {
+        // Initial 
+        init: function(options) {
+            var self = this;
+            $.extend(this.options, options)
 
-        buildAnimation: function() {
-            this.element = $(this.element)
             if (this.element.attr('k-animation')) {
                 var $e = this.element,
                     $o = $e.attr('k-class') ? {
@@ -174,35 +178,9 @@
                     }
                 })
             }
-        },
-
-        bindEvents: function() {
-            var plugin = this
-
-            plugin.element.on('click' + '.' + plugin._name, function() {
-                plugin.__click.call(plugin)
-            })
-        },
-
-        unbindEvents: function() {
-            this.element.off('.' + this._name)
-        },
-
-        // Create custom methods
-        __click: function() {
-            alert('I promise to do something cool!')
-            this.callback()
-        },
-
-        callback: function() {
-            var onComplete = this.options.onComplete
-
-            if (typeof onComplete === 'function') {
-                onComplete.call(this.element)
-            }
         }
 
-    })
+    }
 
     // Click Toggle
     $.fn.clickToggle = function(a, b) {
@@ -212,25 +190,16 @@
             return this.on('click', cb)
         }
         // Build Animation 
-
-    $.fn.kAnimation = function(options) {
-        this.each(function() {
-            if (!$.data(this, 'kAnimation_' + pluginName)) {
-                $.data(this, 'kAnimation_' + pluginName, new Plugin(this, options))
+    $.fn[kA] = function(options) {
+        var jQuerykAnimation = this.data(key)
+        if (jQuerykAnimation instanceof kaGlobal) {
+            if (typeof options !== 'undefined') {
+                jQuerykAnimation.init(options)
             }
-        })
-
-        return this
+        } else {
+            jQuerykAnimation = new kaGlobal(this, options)
+            this.data(key, jQuerykAnimation)
+        }
+        return jQuerykAnimation
     }
-
-    $.fn.kAnimation.defaults = {
-        ClassName: 'animated',
-        Animation: 'fadeIn',
-        Type: 'auto', // auto, scroll, click, hover
-        Delay: '0',
-        Forever: false,
-        DelayForever: 0,
-        ScrollLoop: false,
-        onComplete: null
-    }
-})(jQuery, window, document)
+}(jQuery, window, document))
