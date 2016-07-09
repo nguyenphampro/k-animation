@@ -84,15 +84,15 @@ block body
     h1(style="margin:2rem 0;") HTML Attrs 
     h3(style="margin:2rem 0;") Via Auto
     .jumbotron
-      p.className(k-animation="{ClassName: 'animated fadeInUp', Animation: [ 'fadeIn', 'fadeOutUp',], Delay: 1000, Forever: true, DelayForever: 3000}") Auto Animation 
+      p(k-Animation='animated fadeInUp', k-Class="fadeIn, fadeOutUp", k-Delay="1000", k-Forever="true", k-DelayForever="3000", k-Type="Auto") Auto Animation 
     .row.marketing
       .col-lg-12
         h4 HTML
         pre.prettyprint.lang-html.
-          [k-animation="{ClassName: 'animated fadeInUp', Animation: [ 'fadeIn', 'fadeOutUp',], Delay: 1000, Forever: true, DelayForever: 3000}"]
+          (k-Animation='animated fadeInUp', k-Class="fadeIn, fadeOutUp", k-Delay="1000", k-Forever="true", k-DelayForever="3000", k-Type="Auto")
         h4 JS
         pre.prettyprint.lang-js.
-          $('.className').kAnimation();
+          $('[k-Animation]').kAnimation();
   block js 
     script(src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js')
   script.
@@ -116,7 +116,7 @@ block body
         DelayForever: 3000
       });
 
-      $('[k-animation]').kAnimation();
+      $('[k-Animation]').kAnimation();
 
       $('.click').kAnimation({
         ClassName: 'animated',

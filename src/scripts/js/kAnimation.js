@@ -34,18 +34,28 @@
         // Initial 
         init: function(options) {
             $.extend(this.options, options)
-            var attr = this.element.attr('k-animation')
-                // if (attr) {
-                //     this.options = attr
-                // }
-            var $e = this.element,
-                $o = this.options,
-                $d = this.options.Delay,
-                $sl = this.options.ScrollLoop,
-                $f = this.options.Forever,
-                $df = this.options.DelayForever,
-                $t = (this.options.Type).toLocaleLowerCase()
-                // DO Animation 
+
+            if (this.element.attr('k-animation')) {
+                var $e = this.element,
+                    $o = $e.attr('k-class') ? {
+                        ClassName: $e.attr('k-animation'),
+                        Animation: $e.attr('k-class').split(',')
+                    } : this.options,
+                    $d = $e.attr('k-delay') ? $e.attr('k-delay') : this.options.Delay,
+                    $sl = $e.attr('k-scrollLoop') ? $e.attr('k-scrollLoop') : this.options.ScrollLoop,
+                    $f = $e.attr('k-forever') ? $e.attr('k-forever') : this.options.Forever,
+                    $df = $e.attr('k-delayforever') ? $e.attr('k-delayforever') : this.options.DelayForever,
+                    $t = $e.attr('k-type') ? $e.attr('k-type').toLocaleLowerCase() : (this.options.Type).toLocaleLowerCase()
+            } else {
+                var $e = this.element,
+                    $o = this.options,
+                    $d = this.options.Delay,
+                    $sl = this.options.ScrollLoop,
+                    $f = this.options.Forever,
+                    $df = this.options.DelayForever,
+                    $t = (this.options.Type).toLocaleLowerCase()
+            }
+            // DO Animation 
             var doAnimation = function(remove) {
                 // console.log(options)
                 if (remove === 'remove') {
