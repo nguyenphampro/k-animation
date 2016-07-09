@@ -101,20 +101,24 @@ gulp.task('product', [
 gulp.task('rebuild', function(cb) {
     runSequence(
         // Call new task 
-        // 'favicon',
-        // 'inject-favicon-markups',
-        // 'cssmin',
+        'babel',
+        'concat',
+        'copy',
+        'jade',
+        'favicon',
+        'inject-favicon-markups',
+        'cssmin',
         'uglify',
         // 'htmlmin',
         // 'imagemin',
         // 'csscomb',
         // 'tobase64',
         // 'packer',
-        'rev',
+        // 'rev',
         // 'delete-css',
-        'delete-js',
+        // 'delete-js',
         // 'delete-packer',
-        'revreplace',
+        // 'revreplace',
         'done',
         cb
     );
