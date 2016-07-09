@@ -4,21 +4,23 @@
  *  License: MIT
  *  Website: http://baonguyenyam.github.io
  */
+
 ;
 (function($, window, document, undefined) {
-    var pluginName = 'kAnimation'
+    var kA = 'kAnimation'
 
-    function Plugin(element, options) {
+    function kaGlobal(element, options) {
         this.element = element
-        this._name = pluginName
+        this._name = kA
         this._defaults = $.fn.kAnimation.defaults
         this.options = $.extend({}, this._defaults, options)
         this.init()
     }
-    $.extend(Plugin.prototype, {
+    $.extend(kaGlobal.prototype, {
         init: function() {
             this.buildAnimation()
             this.bindEvents()
+            this.onComplete()
         },
 
         destroy: function() {
@@ -27,6 +29,7 @@
         },
 
         buildAnimation: function() {
+            var plugin = this
             this.element = $(this.element)
             if (this.element.attr('k-animation')) {
                 var $e = this.element,
@@ -53,8 +56,10 @@
                 // console.log(options)
                 if (remove === 'remove') {
                     $e.removeClass($o.ClassName)
+                    plugin.onBegin.call(plugin)
                 } else {
                     $e.addClass($o.ClassName)
+                    plugin.onBegin.call(plugin)
                 }
 
                 if (typeof($o.Animation) == 'string') {
@@ -77,6 +82,7 @@
                                     $e.removeClass(val)
                                 } else {
                                     $e.addClass(val)
+                                    plugin.onChange.call(plugin)
                                 }
                             }
                         }
@@ -84,6 +90,7 @@
                             timerx[i] = setTimeout(internalCallback(i, indexArraykey), i)
                         } else {
                             timerx[i] = setTimeout(internalCallback(i, indexArraykey), i * $d)
+                            plugin.onChange.call(plugin)
                         }
                         i++
                     })
@@ -180,7 +187,10 @@
             var plugin = this
 
             plugin.element.on('click' + '.' + plugin._name, function() {
-                plugin.__click.call(plugin)
+                plugin.onClick.call(plugin)
+            })
+            plugin.element.on('mouseover' + '.' + plugin._name, function() {
+                plugin.onHover.call(plugin)
             })
         },
 
@@ -189,16 +199,42 @@
         },
 
         // Create custom methods
-        __click: function() {
-            alert('I promise to do something cool!')
-            this.callback()
+        onClick: function() {
+            var onClick = this.options.onClick
+
+            if (typeof onClick === 'function') {
+                onClick.call(this.element)
+            }
         },
 
-        callback: function() {
+        onHover: function() {
+            var onHover = this.options.onHover
+
+            if (typeof onHover === 'function') {
+                onHover.call(this.element)
+            }
+        },
+        onBegin: function() {
+            var onBegin = this.options.onBegin
+
+            if (typeof onBegin === 'function') {
+                onBegin.call(this.element)
+            }
+        },
+
+        onComplete: function() {
             var onComplete = this.options.onComplete
 
             if (typeof onComplete === 'function') {
                 onComplete.call(this.element)
+            }
+        },
+
+        onChange: function() {
+            var onChange = this.options.onChange
+
+            if (typeof onChange === 'function') {
+                onChange.call(this.element)
             }
         }
 
@@ -215,8 +251,8 @@
 
     $.fn.kAnimation = function(options) {
         this.each(function() {
-            if (!$.data(this, 'kAnimation_' + pluginName)) {
-                $.data(this, 'kAnimation_' + pluginName, new Plugin(this, options))
+            if (!$.data(this, 'kAnimation_' + kA)) {
+                $.data(this, 'kAnimation_' + kA, new kaGlobal(this, options))
             }
         })
 
@@ -231,6 +267,10 @@
         Forever: false,
         DelayForever: 0,
         ScrollLoop: false,
-        onComplete: null
+        onComplete: null,
+        onChange: null,
+        onClick: null,
+        onBegin: null,
+        onHover: null
     }
 })(jQuery, window, document)

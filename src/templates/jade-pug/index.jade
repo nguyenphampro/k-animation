@@ -28,7 +28,22 @@ block body
               ],
               Delay: 1000,
               Forever: true,
-              DelayForever: 3000
+              DelayForever: 3000,
+              onComplete: function(){
+                $(this).html('Text changed');
+              },
+              onClick: function(){
+              alert('Clicked');
+              },
+              onChange: function(){
+              console.log('onChange');
+              },
+              onBegin: function(){
+              console.log('onBegin');
+              },
+              onHover: function(){
+              alert('onHover');
+              }
             });
           });
 
@@ -113,7 +128,22 @@ block body
         ],
         Delay: 1000,
         Forever: true,
-        DelayForever: 3000
+        DelayForever: 3000,
+        onComplete: function(){
+          $(this).html('Text changed');
+        },
+        onClick: function(){
+         alert('Clicked');
+        },
+        onChange: function(){
+        //-  console.log('onChange');
+        },
+        onBegin: function(){
+        //-  console.log('onBegin');
+        },
+        onHover: function(){
+         alert('onHover');
+        }
       });
 
       $('[k-Animation]').kAnimation();
