@@ -25,14 +25,14 @@ module.exports = function(gulp, setgulp, plugins, config, target, browserSync) {
     gulp.task('revreplace', () => {
         var target2 = gulp.src(path.join(target, '**/*.html'));
         return target2.pipe(inject(gulp.src([
-                path.join(target, '**/*.css'),
-                path.join(target, '**/*.js')
+                path.join(target, '**/*.min.css'),
+                path.join(target, '**/*.min.js')
             ], {
                 read: false,
                 ignorePath: '/' + target + '/',
                 addRootSlash: true
             })))
-            .pipe(replace('/' + target + '/', '/'))
+            .pipe(replace('/' + target + '/', './'))
             .pipe(gulp.dest(dest));
     });
 
