@@ -11,14 +11,17 @@
 (function($, window, document, undefined) {
     var kA = 'kAnimation'
 
-    function kaGlobal(element, options) {
+    function kaGlobal(element, options, type) {
         this.element = element
         this._name = kA
         this._defaults = $.fn.kAnimation.defaults
         this.options = $.extend({}, this._defaults, options)
         this.init()
+
     }
+
     $.extend(kaGlobal.prototype, {
+
         init: function() {
             this.bindEvents()
             this.onComplete()
@@ -26,11 +29,13 @@
 
         destroy: function() {
             this.unbindEvents()
+            this.element.removeData()
         },
 
         bindEvents: function() {
             var plugin = this
             this.element = $(this.element)
+
             if (this.element.attr('k-animation')) {
                 var $e = this.element,
                     $o = $e.attr('k-class') ? {
@@ -51,9 +56,10 @@
                     $df = this.options.DelayForever,
                     $t = (this.options.Type).toLocaleLowerCase()
             }
+
+
             // DO Animation 
             var doAnimation = function(remove) {
-                // console.log(options)
                 if (remove === 'remove') {
                     $e.removeClass($o.ClassName)
                     plugin.onBegin.call(plugin)
@@ -195,10 +201,10 @@
 
         unbindEvents: function() {
             this.element.off('.' + this._name)
-            this.element.removeData()
         },
 
         // Create custom methods
+
         onClick: function() {
             var onClick = this.options.onClick
 
@@ -261,12 +267,13 @@
     $.fn.kAnimation = function(options) {
         this.each(function() {
             if (!$.data(this, 'kAnimation_' + kA)) {
-                $.data(this, 'kAnimation_' + kA, new kaGlobal(this, options))
+                $.data(this, 'kAnimation_' + kA, new kaGlobal(this, options, 'initial'))
             }
         })
-
         return this
     }
+
+
 
     $.fn.kAnimation.defaults = {
         ClassName: 'animated',

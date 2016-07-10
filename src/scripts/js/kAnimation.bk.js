@@ -3,35 +3,42 @@
  *  Author: Bao Nguyen
  *  License: MIT
  *  Website: http://baonguyenyam.github.io
+ *  Version: 6.0.1
  */
+
+
 ;
 (function($, window, document, undefined) {
-    var kA = 'kAnimation',
-        key = 'ka_' + kA
+    var kA = 'kAnimation'
 
-    var kaGlobal = function(element, options) {
+    function kaGlobal(element, options, type) {
         this.element = element
+        this._name = kA
+        this._defaults = $.fn.kAnimation.defaults
+        this.options = $.extend({}, this._defaults, options)
+        this.init()
 
-        // OPTIONS
-        this.options = {
-            ClassName: 'animated',
-            Animation: 'fadeIn',
-            Type: 'auto', // auto, scroll, click, hover
-            Delay: '0',
-            Forever: false,
-            DelayForever: 0,
-            ScrollLoop: false
-        }
-
-        this.init(options)
     }
 
-    kaGlobal.prototype = {
-        // Initial 
-        init: function(options) {
-            var self = this;
-            $.extend(this.options, options)
+    $.extend(kaGlobal.prototype, {
 
+        init: function() {
+            this.bindEvents()
+            this.onComplete()
+        },
+
+        destroy: function() {
+            this.unbindEvents()
+            this.element.removeData()
+        },
+
+        reset: function() {
+            console.log(1);
+        },
+
+        bindEvents: function() {
+            var plugin = this
+            this.element = $(this.element)
             if (this.element.attr('k-animation')) {
                 var $e = this.element,
                     $o = $e.attr('k-class') ? {
@@ -57,8 +64,10 @@
                 // console.log(options)
                 if (remove === 'remove') {
                     $e.removeClass($o.ClassName)
+                    plugin.onBegin.call(plugin)
                 } else {
                     $e.addClass($o.ClassName)
+                    plugin.onBegin.call(plugin)
                 }
 
                 if (typeof($o.Animation) == 'string') {
@@ -81,6 +90,7 @@
                                     $e.removeClass(val)
                                 } else {
                                     $e.addClass(val)
+                                    plugin.onChange.call(plugin)
                                 }
                             }
                         }
@@ -88,6 +98,7 @@
                             timerx[i] = setTimeout(internalCallback(i, indexArraykey), i)
                         } else {
                             timerx[i] = setTimeout(internalCallback(i, indexArraykey), i * $d)
+                            plugin.onChange.call(plugin)
                         }
                         i++
                     })
@@ -178,9 +189,72 @@
                     }
                 })
             }
+
+            plugin.element.on('click' + '.' + plugin._name, function() {
+                plugin.onClick.call(plugin)
+            })
+            plugin.element.on('mouseover' + '.' + plugin._name, function() {
+                plugin.onHover.call(plugin)
+            })
+            plugin.element.on('mouseleave' + '.' + plugin._name, function() {
+                plugin.unHover.call(plugin)
+            })
+        },
+
+        unbindEvents: function() {
+            this.element.off('.' + this._name)
+        },
+
+        // Create custom methods
+        onClick: function() {
+            var onClick = this.options.onClick
+
+            if (typeof onClick === 'function') {
+                onClick.call(this.element)
+            }
+        },
+
+        onHover: function() {
+            var onHover = this.options.onHover
+
+            if (typeof onHover === 'function') {
+                onHover.call(this.element)
+            }
+        },
+
+        unHover: function() {
+            var unHover = this.options.unHover
+
+            if (typeof unHover === 'function') {
+                unHover.call(this.element)
+            }
+        },
+
+        onBegin: function() {
+            var onBegin = this.options.onBegin
+
+            if (typeof onBegin === 'function') {
+                onBegin.call(this.element)
+            }
+        },
+
+        onComplete: function() {
+            var onComplete = this.options.onComplete
+
+            if (typeof onComplete === 'function') {
+                onComplete.call(this.element)
+            }
+        },
+
+        onChange: function() {
+            var onChange = this.options.onChange
+
+            if (typeof onChange === 'function') {
+                onChange.call(this.element)
+            }
         }
 
-    }
+    })
 
     // Click Toggle
     $.fn.clickToggle = function(a, b) {
@@ -190,16 +264,30 @@
             return this.on('click', cb)
         }
         // Build Animation 
-    $.fn[kA] = function(options) {
-        var jQuerykAnimation = this.data(key)
-        if (jQuerykAnimation instanceof kaGlobal) {
-            if (typeof options !== 'undefined') {
-                jQuerykAnimation.init(options)
+
+    $.fn.kAnimation = function(options) {
+        this.each(function() {
+            if (!$.data(this, 'kAnimation_' + kA)) {
+                $.data(this, 'kAnimation_' + kA, new kaGlobal(this, options, 'initial'))
             }
-        } else {
-            jQuerykAnimation = new kaGlobal(this, options)
-            this.data(key, jQuerykAnimation)
-        }
-        return jQuerykAnimation
+        })
+        return this
     }
-}(jQuery, window, document))
+
+
+
+    $.fn.kAnimation.defaults = {
+        ClassName: 'animated',
+        Animation: 'fadeIn',
+        Type: 'auto', // auto, scroll, click, hover
+        Delay: '0',
+        Forever: false,
+        DelayForever: 0,
+        ScrollLoop: false,
+        onComplete: null,
+        onChange: null,
+        onClick: null,
+        onBegin: null,
+        onHover: null
+    }
+})(jQuery, window, document)
