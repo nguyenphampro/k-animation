@@ -1,4 +1,118 @@
 
+#Install
+
+***Via Bower:***
+```
+bower install --save k-animation 
+```
+___
+
+#Run
+
+***Auto:***
+
+```js
+$(document).ready(function() {
+  $('.auto').kAnimation({
+    ClassName: 'animated fadeInUp',
+    Animation: [
+      'fadeIn',
+      'fadeOutUp',
+    ],
+    Delay: 1000,
+    Forever: true,
+    DelayForever: 3000
+  });
+});
+```
+***Click:***
+
+```js
+$(document).ready(function() {
+  $('.click').kAnimation({
+    ClassName: 'animated',
+    Animation: 'fadeInUp',
+    Type: 'Click',
+    Forever: true,
+    DelayForever: 100
+  });
+});
+```
+
+***Hover:***
+
+```js
+$(document).ready(function() {
+  $('.hover').kAnimation({
+    ClassName: 'animated',
+    Animation: 'fadeInUp',
+    Type: 'Hover',
+    Forever: true,
+    DelayForever: 100
+  });
+});
+```
+
+***Scroll:***
+
+```js
+$(document).ready(function() {
+  $(".scroll").kAnimation({
+    ClassName: 'animated',
+    Animation: 'fadeInUp',
+    Delay: 2000,
+    ScrollLoop: true,
+    Type: 'Scroll'
+  });
+});
+```
+
+***Event:***
+
+```js
+$(document).ready(function() {
+  $('.events').kAnimation({
+    ClassName: 'animated fadeInUp',
+    Animation: [
+      'fadeIn',
+      'fadeOutUp',
+    ],
+    Delay: 1000,
+    Forever: true,
+    DelayForever: 3000,
+    onComplete: function(){
+      $(this).html('Text changed');
+    },
+    onClick: function(){
+      alert('Clicked');
+    },
+    onChange: function(){
+      console.log('onChange');
+    },
+    onBegin: function(){
+      console.log('onBegin');
+    },
+    onHover: function(){
+      alert('onHover');
+    },
+    unHover: function(){
+      alert('unHover');
+    }
+  });
+});
+```
+
+###Via HTML Tag
+
+####HTML
+
+```html
+<p k-animation="animated fadeInUp" k-class="fadeIn, fadeOutUp" k-delay="1000" k-forever="true" k-delayforever="3000" k-type="Auto">Auto Animation </p>
+```
+```js
+$('[k-Animation]').kAnimation();
+```
+
 ## Licence
 
 Copyright &copy; 2016 Bao Nguyen
